@@ -18,7 +18,7 @@ public:
         shape.setOrigin(radius, radius);
     }
 
-    void update(float dt, sf::RenderWindow &window)
+    void update(float dt, sf::FloatRect boxBounds)
     {
         sf::Vector2f position = shape.getPosition();
 
@@ -26,27 +26,27 @@ public:
         position.y += vy * dt;
 
         // collision with left wall
-        if (position.x - radius < 0)
+        if (position.x - radius < boxBounds.left)
         {
-            position.x = radius;
+            position.x = boxBounds.left + radius;
             vx = -vx;
         }
         // collision with right wall
-        else if (position.x + radius > window.getSize().x)
+        else if (position.x + radius > boxBounds.left + boxBounds.width)
         {
-            position.x = window.getSize().x - radius;
+            position.x = boxBounds.left + boxBounds.width - radius;
             vx = -vx;
         }
         // collision with top wall
-        if (position.y - radius < 0)
+        if (position.y - radius < boxBounds.top)
         {
-            position.y = radius;
+            position.y = boxBounds.top + radius;
             vy = -vy;
         }
         // collision with bottom wall
-        else if (position.y + radius > window.getSize().y)
+        else if (position.y + radius > boxBounds.top + boxBounds.height)
         {
-            position.y = window.getSize().y - radius;
+            position.y = boxBounds.top + boxBounds.height - radius;
             vy = -vy;
         }
         shape.setPosition(position);
@@ -59,6 +59,15 @@ int main()
 
     // discrete collision detection, to take care of tunneling
     window.setFramerateLimit(60);
+
+    sf::FloatRect boxBounds(100, 100, 600, 400);
+
+    sf::RectangleShape boxOutline;
+    boxOutline.setPosition(boxBounds.left, boxBounds.top);
+    boxOutline.setSize(sf::Vector2f(boxBounds.width, boxBounds.height));
+    boxOutline.setFillColor(sf::Color::Transparent);
+    boxOutline.setOutlineThickness(5);
+    boxOutline.setOutlineColor(sf::Color::White);
 
     Ball ball(400, 400, 20, 200, 150);
 
@@ -76,10 +85,11 @@ int main()
         }
 
         float dt = clock.restart().asSeconds();
-        ball.update(dt, window);
+        ball.update(dt, boxBounds);
 
         window.clear(sf::Color::Black);
 
+        window.draw(boxOutline);
         window.draw(ball.shape);
         window.display();
     }
