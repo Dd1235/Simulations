@@ -1,8 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 // g++ -o main main.cpp -I/opt/homebrew/opt/sfml/include -L/opt/homebrew/opt/sfml/lib -lsfml-graphics -lsfml-window -lsfml-system
 
 // ./main
+
+// ./run_and_watch.sh
+
 class Ball
 {
 public:
@@ -10,8 +14,9 @@ public:
     float vx, vy;
     float ax, ay;
     float radius;
+    float restitution; // coefficient of restitution between the ball and the wall
 
-    Ball(float x, float y, float radius, float vx, float vy, float ax = 0, float ay = 0) : vx(vx), vy(vy), ax(ax), ay(ay), radius(radius)
+    Ball(float x, float y, float radius, float vx, float vy, float ax = 0, float ay = 0, float restitution = 1.0f) : vx(vx), vy(vy), ax(ax), ay(ay), radius(radius), restitution(restitution)
     {
         shape.setPosition(x, y);
         shape.setRadius(radius);
@@ -33,25 +38,25 @@ public:
         if (position.x - radius < boxBounds.left)
         {
             position.x = boxBounds.left + radius;
-            vx = -vx;
+            vx = -vx * restitution;
         }
         // collision with right wall
         else if (position.x + radius > boxBounds.left + boxBounds.width)
         {
             position.x = boxBounds.left + boxBounds.width - radius;
-            vx = -vx;
+            vx = -vx * restitution;
         }
         // collision with top wall
         if (position.y - radius < boxBounds.top)
         {
             position.y = boxBounds.top + radius;
-            vy = -vy;
+            vy = -vy * restitution;
         }
         // collision with bottom wall
         else if (position.y + radius > boxBounds.top + boxBounds.height)
         {
             position.y = boxBounds.top + boxBounds.height - radius;
-            vy = -vy;
+            vy = -vy * restitution;
         }
         shape.setPosition(position);
     }
@@ -75,8 +80,9 @@ int main()
 
     // assuming scaling factor is such that 1 meter = 100 pixels
     float gPixels = 980.0f;
+    float restitution = 0.8f;
 
-    Ball ball(400, 400, 10, 200, 500, 0, gPixels);
+    Ball ball(400, 400, 10, 200, 500, 0, gPixels, restitution);
 
     sf::Clock clock;
 
