@@ -8,9 +8,10 @@ class Ball
 public:
     sf::CircleShape shape;
     float vx, vy;
+    float ax, ay;
     float radius;
 
-    Ball(float x, float y, float radius, float vx, float vy) : vx(vx), vy(vy), radius(radius)
+    Ball(float x, float y, float radius, float vx, float vy, float ax = 0, float ay = 0) : vx(vx), vy(vy), ax(ax), ay(ay), radius(radius)
     {
         shape.setPosition(x, y);
         shape.setRadius(radius);
@@ -21,6 +22,9 @@ public:
     void update(float dt, sf::FloatRect boxBounds)
     {
         sf::Vector2f position = shape.getPosition();
+
+        vx += ax * dt;
+        vy += ay * dt;
 
         position.x += vx * dt;
         position.y += vy * dt;
@@ -69,7 +73,10 @@ int main()
     boxOutline.setOutlineThickness(5);
     boxOutline.setOutlineColor(sf::Color::White);
 
-    Ball ball(400, 400, 20, 200, 150);
+    // assuming scaling factor is such that 1 meter = 100 pixels
+    float gPixels = 980.0f;
+
+    Ball ball(400, 400, 10, 200, 500, 0, gPixels);
 
     sf::Clock clock;
 
