@@ -2,17 +2,18 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <vector>
+#include <sstream>
 
 const double g = 9.81;
 const double L1 = 200;
 const double L2 = 200;
 const double m1 = 10.0;
 const double m2 = 10.0;
-double theta1 = M_PI / 36;
-double theta2 = M_PI / 36;
+double theta1 = M_PI / 6;
+double theta2 = M_PI / 6;
 double omega1 = 0.0;
 double omega2 = 0.0;
-double dt = 0.01;
+double dt = 0.005;
 
 void derivatives(double &theta1, double &omega1, double &theta2, double &omega2, double &omega1_dot, double &omega2_dot)
 {
@@ -69,11 +70,32 @@ void rk4_step(double &theta1, double &omega1, double &theta2, double &omega2, do
     omega2 += (dt / 6.0) * (k1_omega2 + 2.0 * k2_omega2 + 2.0 * k3_omega2 + k4_omega2);
 }
 
+double calculate_kinetic_energy(double theta1, double omega1, double theta2, double omega2)
+{
+    double T1 = 0.5 * m1 * L1 * L1 * omega1 * omega1;
+    double T2 = 0.5 * m2 * (L1 * L1 * omega1 * omega1 + L2 * L2 * omega2 * omega2 + 2 * L1 * L2 * omega1 * omega2 * cos(theta1 - theta2));
+    return T1 + T2;
+}
+
+double calculate_potential_energy(double theta1, double theta2)
+{
+    double V1 = -m1 * g * L1 * cos(theta1);
+    double V2 = -m2 * g * (L1 * cos(theta1) + L2 * cos(theta2));
+    return V1 + V2;
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Double Pendulum Simulation");
-    sf::Vector2f origin(400, 300);
+    sf::Vector2f origin(400, 100);
     std::vector<sf::Vertex> trajectory;
+
+    sf::Font font;
+    if (!font.loadFromFile("Arial.ttf"))
+    {
+        std::cerr << "Error loading font\n";
+        return -1;
+    }
 
     while (window.isOpen())
     {
@@ -84,7 +106,13 @@ int main()
                 window.close();
         }
 
-        rk4_step(theta1, omega1, theta2, omega2, dt);
+        // rk4_step(theta1, omega1, theta2, omega2, dt);
+        // trying with multiple rk4 steps per frame
+        int sub_steps = 10;
+        for (int i = 0; i < sub_steps; i++)
+        {
+            rk4_step(theta1, omega1, theta2, omega2, dt / sub_steps);
+        }
 
         double x1 = origin.x + L1 * sin(theta1);
         double y1 = origin.y + L1 * cos(theta1);
@@ -94,6 +122,10 @@ int main()
         trajectory.emplace_back(sf::Vector2f(x2, y2), sf::Color::Red);
         if (trajectory.size() > 1000)
             trajectory.erase(trajectory.begin());
+
+        double T = calculate_kinetic_energy(theta1, omega1, theta2, omega2);
+        double V = calculate_potential_energy(theta1, theta2);
+        double E = T + V;
 
         window.clear();
 
@@ -117,6 +149,16 @@ int main()
         mass2.setPosition(x2, y2);
         mass2.setFillColor(sf::Color::Green);
         window.draw(mass2);
+
+        std::ostringstream energyDisplay;
+        energyDisplay << "Total Energy = " << E << "\n";
+        energyDisplay << "Kinetic Energy = " << T << "\n";
+        energyDisplay << "Potential Energy = " << V << "\n";
+
+        sf::Text energyText(energyDisplay.str(), font, 15);
+        energyText.setPosition(10, 10);
+        energyText.setFillColor(sf::Color::White);
+        window.draw(energyText);
 
         window.display();
     }
