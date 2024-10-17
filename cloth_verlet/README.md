@@ -187,7 +187,7 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 2. Collision detecting with other objects
 3. Optimize processTear() and togglePin()
 
-## Some useful resources I found helpful
+## Some resources I found helpful
 
 1. [Short video explaining Verlet Integration](https://youtu.be/g55QvpAev0I?si=JdR67iT-l5GhM6Vh)
 2. [Advanced Character Physics paper](https://www.cs.cmu.edu/afs/cs/academic/class/15462-s13/www/lec_slides/Jakobsen.pdf)
