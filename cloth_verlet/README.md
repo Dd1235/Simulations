@@ -179,13 +179,15 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 
 ## To do
 
-1. Also Implement using
+1. Implement shear and flexion springs
+
+2. Also Implement using
 
 - Finite element method
 - Position based dynamics
 
-2. Collision detecting with other objects
-3. Optimize processTear() and togglePin()
+3. Collision detecting with other objects
+4. Optimize processTear() and togglePin()
 
 ## Some resources I found helpful
 
@@ -200,3 +202,4 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 3. [Position Based Dynamics](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf)
 4. [Line Segment Intersection](https://www.cs.umd.edu/class/spring2020/cmsc754/Lects/lect04-intersection.pdf)
 5. [Some more notes](https://graphics.stanford.edu/courses/cs468-02-winter/Papers/Collisions_vetements.pdf)
+6. [Provot95](http://graphics.stanford.edu/courses/cs468-02-winter/Papers/Rigidcloth.pdf)
