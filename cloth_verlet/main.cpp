@@ -315,8 +315,8 @@ void resetSimulation(std::vector<Particle> &particles, std::vector<Constraint> &
         for (int col = 0; col < COLS; ++col)
         {
             float x = col * REST_DISTANCE + WIDTH / 3.0f;
-            float y = row * REST_DISTANCE + 50.0f;    // Start higher on the screen
-            bool pinned = (row == 0 && col % 5 == 0); // Pin every 5th particle on the top row
+            float y = row * REST_DISTANCE + 50.0f;                         // Start higher on the screen
+            bool pinned = (row == 0 && (col % 5 == 0 or col == COLS - 1)); // Pin every 5th particle on the top row
             particles.emplace_back(x, y, pinned);
         }
     }
@@ -352,36 +352,8 @@ int main()
     std::vector<Particle> particles;
     std::vector<Constraint> constraints;
 
-    // Create particles
-    for (int row = 0; row < ROWS; ++row)
-    {
-        for (int col = 0; col < COLS; ++col)
-        {
-            float x = col * REST_DISTANCE + WIDTH / 3.0f;
-            float y = row * REST_DISTANCE + 50.0f;    // Start higher on the screen
-            bool pinned = (row == 0 && col % 5 == 0); // Pin every 5th particle on the top row
-            particles.emplace_back(x, y, pinned);
-        }
-    }
-
-    // Create structural constraints (vertical and horizontal)
-    for (int row = 0; row < ROWS; ++row)
-    {
-        for (int col = 0; col < COLS; ++col)
-        {
-            int index = row * COLS + col;
-            if (col < COLS - 1)
-            {
-                constraints.emplace_back(&particles[index], &particles[index + 1]);
-            }
-            if (row < ROWS - 1)
-            {
-                constraints.emplace_back(&particles[index], &particles[index + COLS]);
-            }
-        }
-    }
-
-    // need to implement shear and bend constraints
+    resetSimulation(particles, constraints);
+    // // need to implement shear and bend constraints
     // // Create shear constraints (diagonals)
     // for (int row = 0; row < ROWS - 1; ++row)
     // {

@@ -199,3 +199,4 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 2. [Integration Methods](https://cseweb.ucsd.edu/classes/sp16/cse169-a/slides/CSE169_11.pdf)
 3. [Position Based Dynamics](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf)
 4. [Line Segment Intersection](https://www.cs.umd.edu/class/spring2020/cmsc754/Lects/lect04-intersection.pdf)
+5. [Some more notes](https://graphics.stanford.edu/courses/cs468-02-winter/Papers/Collisions_vetements.pdf)
