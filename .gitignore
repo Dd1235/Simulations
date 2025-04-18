@@ -1,3 +1,6 @@
 .vscode/
 **/main
 **/run_and_watch.sh
+verlet_integration/
+rope/
+cloth_verlet/try.cpp

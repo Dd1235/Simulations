@@ -2,6 +2,8 @@
 
 This project is a real-time cloth simulation implemented in C++ using SFML (Simple and Fast Multimedia Library). It showcases a physically-based cloth model using Verlet integration as an integrator, and simulates cloth using a simplified mass-spring model, providing interactive features such as tearing and pinning. The simulation demonstrates fundamental concepts in physics and computer graphics.
 
+![Demo](g.gif)
+
 ## Table of Contents
 
 - [Features](#features)
@@ -194,6 +196,8 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 1. [Short video explaining Verlet Integration](https://youtu.be/g55QvpAev0I?si=JdR67iT-l5GhM6Vh)
 2. [Advanced Character Physics paper](https://www.cs.cmu.edu/afs/cs/academic/class/15462-s13/www/lec_slides/Jakobsen.pdf)
 3. [Notes on Mass-Spring modeling](https://ocw.mit.edu/courses/6-837-computer-graphics-fall-2012/resources/mit6_837f12_lec08/)
+4. [Collision vetements](https://graphics.stanford.edu/courses/cs468-02-winter/Papers/Collisions_vetements.pdf)
+5. [Provot95](http://graphics.stanford.edu/courses/cs468-02-winter/Papers/Rigidcloth.pdf)
 
 ## Also look into
 
@@ -201,5 +205,5 @@ This project is a real-time cloth simulation implemented in C++ using SFML (Simp
 2. [Integration Methods](https://cseweb.ucsd.edu/classes/sp16/cse169-a/slides/CSE169_11.pdf)
 3. [Position Based Dynamics](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf)
 4. [Line Segment Intersection](https://www.cs.umd.edu/class/spring2020/cmsc754/Lects/lect04-intersection.pdf)
-5. [Some more notes](https://graphics.stanford.edu/courses/cs468-02-winter/Papers/Collisions_vetements.pdf)
-6. [Provot95](http://graphics.stanford.edu/courses/cs468-02-winter/Papers/Rigidcloth.pdf)
+5. [Andrew Campbell's Cloth Simulation](https://andrewdcampbell.github.io/clothsim/#:~:text=Shearing%20constraints%20exist%20between%20a,point%20mass%20two%20above%20it.)
+6. [Some more notes](https://sites.cc.gatech.edu/classes/AY2015/cs4496_spring/slides/ClothSim.pdf)

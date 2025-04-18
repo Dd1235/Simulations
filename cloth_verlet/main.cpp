@@ -94,10 +94,11 @@ public:
     float restLength;
     // make inactive if the constraint is broken
     bool isActive;
+    float stiffness;
 
     // calculate the rest length between the two particles
-    Constraint(Particle *p1, Particle *p2)
-        : particle1(p1), particle2(p2), isActive(true)
+    Constraint(Particle *p1, Particle *p2, float stiffness = 1.0f)
+        : particle1(p1), particle2(p2), isActive(true), stiffness(stiffness)
     {
         sf::Vector2f delta = particle2->position - particle1->position;
         restLength = std::hypot(delta.x, delta.y);
@@ -123,7 +124,7 @@ public:
         float diff = (currentLength - restLength) / currentLength;
 
         // scale the distance between them based on the difference, and multiply by 0.5 so that the correction is equally shared between the two particles
-        sf::Vector2f correction = delta * 0.5f * diff;
+        sf::Vector2f correction = delta * 0.5f * diff * stiffness;
 
         if (!particle1->isPinned)
             particle1->position += correction;
@@ -337,6 +338,34 @@ void resetSimulation(std::vector<Particle> &particles, std::vector<Constraint> &
             }
         }
     }
+
+    // // Create shear constraints (lower stiffness)
+    // for (int row = 0; row < ROWS - 1; ++row)
+    // {
+    //     for (int col = 0; col < COLS - 1; ++col)
+    //     {
+    //         int index = row * COLS + col;
+    //         constraints.emplace_back(&particles[index], &particles[index + COLS + 1], shear_stiffness); // More flexible
+    //         constraints.emplace_back(&particles[index + 1], &particles[index + COLS], shear_stiffness); // More flexible
+    //     }
+    // }
+
+    // // Create bend constraints (medium stiffness)
+    // for (int row = 0; row < ROWS; ++row)
+    // {
+    //     for (int col = 0; col < COLS; ++col)
+    //     {
+    //         int index = row * COLS + col;
+    //         if (col < COLS - 2) // Horizontal bend constraint
+    //         {
+    //             constraints.emplace_back(&particles[index], &particles[index + 2], flexion_stiffness); // Moderate flexibility
+    //         }
+    //         if (row < ROWS - 2) // Vertical bend constraint
+    //         {
+    //             constraints.emplace_back(&particles[index], &particles[index + 2 * COLS], flexion_stiffness); // Moderate flexibility
+    //         }
+    //     }
+    // }
 }
 
 // Initialize static members
@@ -353,34 +382,6 @@ int main()
     std::vector<Constraint> constraints;
 
     resetSimulation(particles, constraints);
-    // // need to implement shear and bend constraints
-    // // Create shear constraints (diagonals)
-    // for (int row = 0; row < ROWS - 1; ++row)
-    // {
-    //     for (int col = 0; col < COLS - 1; ++col)
-    //     {
-    //         int index = row * COLS + col;
-    //         constraints.emplace_back(&particles[index], &particles[index + COLS + 1]);
-    //         constraints.emplace_back(&particles[index + 1], &particles[index + COLS]);
-    //     }
-    // }
-
-    // // Create bend constraints (over two particles)
-    // for (int row = 0; row < ROWS; ++row)
-    // {
-    //     for (int col = 0; col < COLS; ++col)
-    //     {
-    //         int index = row * COLS + col;
-    //         if (col < COLS - 2)
-    //         {
-    //             constraints.emplace_back(&particles[index], &particles[index + 2]);
-    //         }
-    //         if (row < ROWS - 2)
-    //         {
-    //             constraints.emplace_back(&particles[index], &particles[index + 2 * COLS]);
-    //         }
-    //     }
-    // }
 
     sf::RectangleShape resetButton(sf::Vector2f(100.0f, 40.0f));
     resetButton.setPosition(WIDTH - 120.0f, HEIGHT - 60.0f);
